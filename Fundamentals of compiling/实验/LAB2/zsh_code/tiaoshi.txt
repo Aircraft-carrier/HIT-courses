@@ -1,0 +1,40 @@
+gdb ./parser 
+b syntax.y:651
+run ../test/16.cmm
+layout src
+
+print item->field->name
+print item->field->type->kind
+print item->nextSymbol
+print table->hash->hashArray[10]->field->name
+
+
+break Stmt
+break semantic.c:105
+break node.c:176
+run ../test/9.cmm
+printf "%.5s\n", p->field->name
+c
+n
+s
+(gdb) layout src
+
+编译时：
+CC = gcc  
+CFLAGS = -g            # 添加调试信息  
+LFO =                  # 在这里添加需要排除的对象文件  
+OBJS = file1.o file2.o # 添加你的对象文件，这里是示例  
+
+parser: $(filter-out $(LFO), $(OBJS))  
+        $(CC) $(CFLAGS) -o parser $(filter-out $(LFO), $(OBJS)) -lfl  
+
+命令行查看：
+objdump -d ./parser
+
+(gdb) print temp->field->name
+$1 = 0x55555556c8f0 "Position"
+(gdb) print temp->field->type->kind
+$2 = STRUCTURE
+(gdb) print temp->field->type->u.structure.structName
+$3 = 0x55555556c7d0 "Position"
+(gdb) 
